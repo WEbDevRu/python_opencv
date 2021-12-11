@@ -1,0 +1,76 @@
+<ManagerScreens@ScreenManager>:
+
+    MenuScreen:
+        id: menu
+    SortedListFood:
+        id: list_food
+    CaptureVideo:
+        id: capture_video
+
+<MenuScreen@Screen>:
+    name: "menu"
+
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: "Список видео"
+            on_press: app.screen_manager.current = 'list_food'
+        Button:
+            text: "Записать видео"
+            on_press: app.screen_manager.current = 'capture_video'
+
+<CaptureVideo>:
+    name: "capture_video"
+    _app: app
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            text: '< Назад в главное меню'
+            on_press: app.screen_manager.current = 'menu'
+            size_hint_y: None
+            height: dp(40)
+        KivyCamera:
+            id: qrcam
+
+        BoxLayout:
+            orientation: "horizontal"
+            height: 40
+            size_hint_y: None
+
+            Button:
+                id: butt_start
+                size_hint: 0.5,1
+                text: root.buttonText
+                on_press: root.toggleVideoCapture()
+
+            Button:
+                id: butt_exit
+                text: "quit"
+                size_hint: 0.5,1
+                on_press: root.doexit()
+
+
+<SortedListFood>:
+    name: "list_food"
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            text: '< Назад в главное меню'
+            on_press: app.screen_manager.current = 'menu'
+            size_hint_y: None
+            height: dp(40)
+
+        RecycleView:
+            id: rv
+            key_viewclass: 'viewclass'
+            key_size: 'height'
+            RecycleBoxLayout:
+                default_size: None, dp(40)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
