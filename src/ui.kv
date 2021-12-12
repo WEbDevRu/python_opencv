@@ -2,10 +2,12 @@
 
     MenuScreen:
         id: menu
-    SortedListFood:
-        id: list_food
+    VideosList:
+        id: list_videos
     CaptureVideo:
         id: capture_video
+    VideoPage
+        id: video_page
 
 <MenuScreen@Screen>:
     name: "menu"
@@ -14,7 +16,7 @@
         orientation: 'vertical'
         Button:
             text: "Список видео"
-            on_press: app.screen_manager.current = 'list_food'
+            on_press: app.screen_manager.current = 'list_videos'
         Button:
             text: "Записать видео"
             on_press: app.screen_manager.current = 'capture_video'
@@ -31,8 +33,16 @@
             on_press: app.screen_manager.current = 'menu'
             size_hint_y: None
             height: dp(40)
+
         KivyCamera:
             id: qrcam
+
+        TextInput:
+            id: field_filename
+            multiline: False
+            height: dp(40)
+            size_hint_y: None
+            hint_text: "Введите название для файла"
 
         BoxLayout:
             orientation: "horizontal"
@@ -47,13 +57,15 @@
 
             Button:
                 id: butt_exit
-                text: "quit"
+                text: "Сохранить"
                 size_hint: 0.5,1
-                on_press: root.doexit()
+                on_press:
+                    if field_filename.text != '': root.save_file(field_filename.text); \
+                    field_filename.text = ''
 
-
-<SortedListFood>:
-    name: "list_food"
+<VideosList>:
+    name: "list_videos"
+    _app: app
 
     BoxLayout:
         orientation: 'vertical'
@@ -74,3 +86,15 @@
                 size_hint_y: None
                 height: self.minimum_height
                 orientation: 'vertical'
+
+<VideoPage>:
+    name: "video_page"
+    _app: app
+
+    BoxLayout:
+        orientation: 'vertical'
+    Button:
+        text: '< Назад в меню видео'
+        on_press: app.screen_manager.current = 'list_videos'
+        size_hint_y: None
+        height: dp(40)
