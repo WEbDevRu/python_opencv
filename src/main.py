@@ -47,6 +47,7 @@ class KivyCamera(Image):
         super(KivyCamera, self).__init__(**kwargs)
         self.capture = None
         self.output = None
+        self.labeltext = None
 
     def start(self, capture, fps=60):
         self.capture = capture
@@ -59,6 +60,9 @@ class KivyCamera(Image):
         self.output.release()
         capture.release()
         cv2.destroyAllWindows()
+
+    def changeFrameText(self, text):
+        self.labeltext = text
 
     def save(self, filename):
         self.output.release()
@@ -80,7 +84,7 @@ class KivyCamera(Image):
 
             # Draw a rectangle around the faces
             for (x, y, width, height) in faces:
-                cv2.putText(frame, 'Russkiy',  (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,  (0, 255, 0))
+                cv2.putText(frame, self.labeltext,  (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,  (0, 255, 0))
                 cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0), 2)
             self.output.write(frame)
             if not texture or texture.width != w or texture.height != h:
@@ -111,6 +115,10 @@ class CaptureVideo(Screen):
 
     def save_file(self, filename):
         self.ids.qrcam.save(filename)
+
+    def changeFrameText(self, text):
+        self.ids.qrcam.changeFrameText(text)
+
 
 
 class VideoPage(Screen):
